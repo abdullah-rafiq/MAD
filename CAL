@@ -1,0 +1,248 @@
+import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
+
+class Calculator extends StatefulWidget {
+  const Calculator({super.key});
+
+  @override
+  State<Calculator> createState() => _CalculatorState();
+}
+
+class _CalculatorState extends State<Calculator> {
+  TextEditingController textcontroller =TextEditingController();
+  TextEditingController inputController = TextEditingController();
+
+String expression = ""; 
+
+void updateInput(String value) {
+  setState(() {
+    if(value=="C"){
+    
+        if(inputController.text=="Error"|| inputController.text == "Infinity"){
+          inputController.clear();
+          expression="";
+          }
+        else if (expression.isNotEmpty) {
+          expression = expression.substring(0, expression.length - 1); // Remove last character
+          inputController.text = expression; // Update the TextField
+          }
+}
+
+else if (value == "AC") {
+        expression = "";
+        inputController.clear();
+        textcontroller.clear();
+        }
+
+else if (value == "=") {
+      try {
+        Parser p = Parser();
+        Expression exp = p.parse(expression);
+        ContextModel cm = ContextModel();
+        double eval = exp.evaluate(EvaluationType.REAL, cm);
+        expression = eval.toString();
+        updateHistory("$expression = $eval");
+      } catch (e) {
+        expression = "Error";
+      }
+    } 
+    else {
+      expression += value;
+      }
+    inputController.text = expression; // Update input field with the current expression
+  });
+}
+
+void updateHistory(String calculation) {
+  setState(() {
+    textcontroller.text += '$calculation\n'; // Update history
+    // Scroll to the bottom of the history
+    textcontroller.selection = TextSelection.fromPosition(
+      TextPosition(offset: textcontroller.text.length),
+    );
+  });
+}
+
+  @override
+  Widget build(BuildContext context) {
+    return  Scaffold(
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(top:150),
+                  child: TextField( controller: textcontroller,
+                  readOnly: true,
+                  style: const TextStyle(fontSize: 24),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(10),
+                  )
+                  ),
+                )
+          ),
+          ],
+          ),
+          Row(
+            children: [
+              Expanded(child: Container(
+                margin: const EdgeInsets.only(bottom: 30),
+                child: TextField(
+                  controller: inputController,
+                  readOnly: true,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(fontSize: 40,fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(10),
+                )),
+              ),
+              ),
+            ],
+          ),
+   Expanded(
+    child:GridView.count(crossAxisCount: 4,
+        shrinkWrap: true,
+        mainAxisSpacing: 10.0,  // Adds space between rows
+        crossAxisSpacing: 10.0,  // Adds space between columns
+        padding: const EdgeInsets.all(10.0), 
+
+        children: [
+          ElevatedButton(onPressed: (){
+            updateInput("C");
+          }, 
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ),
+          child: const Text("C")),
+
+          ElevatedButton(onPressed: (){
+            updateInput("(");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("(")),
+          ElevatedButton(onPressed: (){
+            updateInput(")");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text(")")),
+          ElevatedButton(onPressed: (){
+            updateInput("/");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("/")),
+          ElevatedButton(onPressed: (){
+            updateInput("7");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("7")),
+          ElevatedButton(onPressed: (){
+            updateInput("8");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("8")),
+          ElevatedButton(onPressed: (){
+            updateInput("9");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("9")),
+          ElevatedButton(onPressed: (){
+            updateInput("*");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("*")),
+          ElevatedButton(onPressed: (){
+            updateInput("4");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("4")),
+          ElevatedButton(onPressed: (){
+            updateInput("5");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("5")),
+          ElevatedButton(onPressed: (){
+            updateInput("6");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("6")),
+          ElevatedButton(onPressed: (){
+            updateInput("+");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("+")),
+          ElevatedButton(onPressed: (){
+            updateInput("1");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("1")),
+          ElevatedButton(onPressed: (){
+            updateInput("2");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("2")),
+          ElevatedButton(onPressed: (){
+            updateInput("3");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ),
+               child: const Text("3")),
+          ElevatedButton(onPressed: (){
+            updateInput("-");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("-")),
+           ElevatedButton(onPressed: (){
+            updateInput("AC");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 20.0), // Increase text size here
+              ), child: const Text("AC")),
+          ElevatedButton(onPressed: (){
+            updateInput("0");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ), child: const Text("0")),
+          
+          ElevatedButton(onPressed: (){
+            updateInput(".");
+          }, 
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ),child: const Text(".")),
+          ElevatedButton(onPressed: (){
+            updateInput("=");
+          },
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 35.0), // Increase text size here
+              ),
+          child: const Text("=")),
+        ],
+        )
+    ),
+    
+        ],
+        
+      ),
+    );
+  }
+}
