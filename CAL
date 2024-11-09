@@ -73,7 +73,8 @@ void updateHistory(String calculation) {
             children: [
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.only(top:150),
+                  margin: const EdgeInsets.only(top:100),
+                  padding:const EdgeInsets.only(top:50),
                   child: TextField( controller: textcontroller,
                   readOnly: true,
                   style: const TextStyle(fontSize: 24),
@@ -89,7 +90,8 @@ void updateHistory(String calculation) {
           Row(
             children: [
               Expanded(child: Container(
-                margin: const EdgeInsets.only(bottom: 30),
+                margin: const EdgeInsets.only(top:20,bottom: 10),
+               
                 child: TextField(
                   controller: inputController,
                   readOnly: true,
